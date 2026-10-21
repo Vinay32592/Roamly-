@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Roamly — Discover remarkable tourist destinations in India through genuine visitor reviews and travel experiences.">
+  <title>Roamly — Discover Places Through Real Experiences</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link nav__link--active">Home</a>
+        <a href="/explore.html" class="nav__link">Explore</a>
+        <a href="/write-review.html" class="nav__link">Write a Review</a>
+      </div>
+      <div class="nav__auth" id="nav-auth">
+        <a href="/login.html" class="btn btn--ghost btn--sm">Log In</a>
+        <a href="/register.html" class="btn btn--primary btn--sm">Sign Up</a>
+      </div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span>
+        <span class="nav__toggle-line"></span>
+        <span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <a href="/write-review.html" class="nav__link">Write a Review</a>
+      <div id="nav-mobile-auth">
+        <a href="/login.html" class="nav__link">Log In</a>
+        <a href="/register.html" class="nav__link">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero__bg">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=85" alt="Mountain landscape at golden hour" loading="eager" class="hero__bg-img">
+        <div class="hero__mist"></div>
+        <canvas id="hero-particles" class="hero__particles"></canvas>
+      </div>
+      <div class="hero__content">
+        <h1 class="hero__heading">Every place has a story.</h1>
+        <p class="hero__subheading">Discover remarkable places through the experiences of people who have been there.</p>
+        <form class="hero__search" id="hero-search-form">
+          <input type="text" class="hero__search-input" id="hero-search-input" placeholder="Search destinations, cities, or states..." aria-label="Search destinations">
+          <button type="submit" class="hero__search-btn">Search</button>
+        </form>
+        <div style="margin-top: var(--space-lg);">
+          <a href="/explore.html" class="btn btn--secondary" style="border-color: rgba(255,255,255,0.4); color: var(--color-white);">Explore All Destinations →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Destinations -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Featured Destinations</h2>
+          <p class="section__subtitle">Handpicked places worth exploring, from ancient heritage sites to serene hill stations.</p>
+        </div>
+        <div id="featured-destinations">
+          <div class="loading"><div class="loading__spinner"></div></div>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-2xl);">
+          <a href="/explore.html" class="btn btn--secondary">View All Destinations</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Explore by Category -->
+    <section class="section section--ivory">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Explore by Category</h2>
+          <p class="section__subtitle">Find destinations that match your travel style.</p>
+        </div>
+        <div class="categories">
+          <a href="/explore.html?category=Mountains" class="category-card" data-category="Mountains">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg></span>
+            <span class="category-card__label">Mountains</span>
+          </a>
+          <a href="/explore.html?category=Beaches" class="category-card" data-category="Beaches">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="17" cy="5" r="3"/><path d="M3 20c2.5-3.5 8-3.5 10.5 0"/><path d="M12.5 20c2-3 6-3 8.5 0"/></svg></span>
+            <span class="category-card__label">Beaches</span>
+          </a>
+          <a href="/explore.html?category=Historical" class="category-card" data-category="Historical">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 7v14M21 7v14M6 7V4l6-2 6 2v3M9 21v-4h6v4"/></svg></span>
+            <span class="category-card__label">Historical</span>
+          </a>
+          <a href="/explore.html?category=Nature+%26+Wildlife" class="category-card" data-category="Nature & Wildlife">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 20h10M10 20c5.5-2.5.8-6.4 3-10 .1-4 3-7.5 3-7.5S13 6 10 10c-2.2 3.6-7.5 7.5-3 10"/></svg></span>
+            <span class="category-card__label">Nature & Wildlife</span>
+          </a>
+          <a href="/explore.html?category=Spiritual" class="category-card" data-category="Spiritual">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg></span>
+            <span class="category-card__label">Spiritual</span>
+          </a>
+          <a href="/explore.html?category=Adventure" class="category-card" data-category="Adventure">
+            <span class="category-card__icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+            <span class="category-card__label">Adventure</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recently Added -->
+    <section class="section section--white">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Recently Added</h2>
+          <p class="section__subtitle">The newest destinations on Roamly.</p>
+        </div>
+        <div id="recent-destinations"></div>
+      </div>
+    </section>
+
+    <!-- Travel Inspiration -->
+    <section class="section section--ivory">
+      <div class="container">
+        <div class="section__header">
+          <h2 class="section__title">Travel Inspiration</h2>
+          <p class="section__subtitle">Ideas and tips for planning your next journey.</p>
+        </div>
+        <div class="inspiration">
+          <div class="inspiration__card">
+            <h3 class="inspiration__card-title">Planning Your First Solo Trip in India</h3>
+            <p class="inspiration__card-text">India offers a rich diversity of landscapes and cultures that make it an ideal destination for solo travellers. From the mountains of Himachal Pradesh to the backwaters of Kerala, here are some starting points:</p>
+            <ul class="inspiration__card-list">
+              <li>Start with well-connected destinations like Jaipur or Goa</li>
+              <li>Research local transport options before arriving</li>
+              <li>Keep digital copies of important documents</li>
+              <li>Connect with local travel communities for recommendations</li>
+            </ul>
+          </div>
+          <div class="inspiration__card">
+            <h3 class="inspiration__card-title">Best Seasons for Travel in India</h3>
+            <p class="inspiration__card-text">India's climate varies dramatically by region. Understanding seasonal patterns helps you make the most of your visit:</p>
+            <ul class="inspiration__card-list">
+              <li>October–March: North India, Rajasthan, and most popular destinations</li>
+              <li>September–May: South Indian hill stations and Kerala</li>
+              <li>June–September: Ladakh (post-snowmelt)</li>
+              <li>July–September: Monsoon season brings lush greenery to the Western Ghats</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <div class="footer__brand">Roamly</div>
+          <p class="footer__text">Helping travellers discover remarkable places through genuine visitor experiences. Focused on tourist destinations across India.</p>
+        </div>
+        <div>
+          <h4 class="footer__heading">Explore</h4>
+          <a href="/explore.html" class="footer__link">All Destinations</a>
+          <a href="/explore.html?category=Mountains" class="footer__link">Mountains</a>
+          <a href="/explore.html?category=Beaches" class="footer__link">Beaches</a>
+          <a href="/explore.html?category=Historical" class="footer__link">Historical</a>
+          <a href="/explore.html?category=Spiritual" class="footer__link">Spiritual</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Community</h4>
+          <a href="/write-review.html" class="footer__link">Write a Review</a>
+          <a href="/register.html" class="footer__link">Join Roamly</a>
+          <a href="/login.html" class="footer__link">Sign In</a>
+        </div>
+        <div>
+          <h4 class="footer__heading">Legal</h4>
+          <a href="/privacy.html" class="footer__link">Privacy Policy</a>
+          <a href="/terms.html" class="footer__link">Terms of Use</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        &copy; 2026 Roamly. All rights reserved. Built as an educational project.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

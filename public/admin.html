@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Roamly Admin Dashboard — Manage destinations, reviews, and users.">
+  <title>Admin Dashboard — Roamly</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link">Home</a>
+        <a href="/explore.html" class="nav__link">Explore</a>
+      </div>
+      <div class="nav__auth" id="nav-auth"></div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span><span class="nav__toggle-line"></span><span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <div id="nav-mobile-auth"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Admin Dashboard</h1>
+        <p class="page-header__subtitle">Manage destinations, reviews, and users.</p>
+      </div>
+    </div>
+
+    <div class="container" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+
+      <!-- Stats -->
+      <div class="admin-stats">
+        <div class="admin-stat">
+          <div class="admin-stat__value" id="stat-destinations">—</div>
+          <div class="admin-stat__label">Destinations</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat__value" id="stat-users">—</div>
+          <div class="admin-stat__label">Users</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat__value" id="stat-reviews">—</div>
+          <div class="admin-stat__label">Reviews</div>
+        </div>
+        <div class="admin-stat">
+          <div class="admin-stat__value" id="stat-rating">—</div>
+          <div class="admin-stat__label">Avg Rating</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="admin-tabs">
+        <button class="admin-tab admin-tab--active" data-tab="destinations">Destinations</button>
+        <button class="admin-tab" data-tab="reviews">Reviews</button>
+        <button class="admin-tab" data-tab="users">Users</button>
+      </div>
+
+      <!-- Destinations Panel -->
+      <div class="tab-panel tab-panel--active" id="panel-destinations">
+
+        <!-- Add/Edit Form -->
+        <div class="auth-card" style="max-width: 100%; margin-bottom: var(--space-2xl);">
+          <h3 style="font-family: var(--font-heading); font-size: var(--text-xl); margin-bottom: var(--space-lg);" id="dest-form-title">Add Destination</h3>
+          <form id="dest-form">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+              <div class="form-group">
+                <label class="form-label" for="dest-name">Name *</label>
+                <input type="text" class="form-input" id="dest-name" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dest-category">Category *</label>
+                <select class="form-select" id="dest-category" required>
+                  <option value="">Select...</option>
+                  <option value="Mountains">Mountains</option>
+                  <option value="Beaches">Beaches</option>
+                  <option value="Historical">Historical</option>
+                  <option value="Nature & Wildlife">Nature & Wildlife</option>
+                  <option value="Spiritual">Spiritual</option>
+                  <option value="Adventure">Adventure</option>
+                  <option value="Hill Stations">Hill Stations</option>
+                  <option value="Heritage">Heritage</option>
+                  <option value="Urban">Urban</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dest-city">City *</label>
+                <input type="text" class="form-input" id="dest-city" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dest-state">State *</label>
+                <input type="text" class="form-input" id="dest-state" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-description">Description *</label>
+              <textarea class="form-textarea" id="dest-description" required rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-images">Image URLs (one per line)</label>
+              <textarea class="form-textarea" id="dest-images" rows="2" placeholder="https://..."></textarea>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+              <div class="form-group">
+                <label class="form-label" for="dest-besttime">Best Time to Visit</label>
+                <input type="text" class="form-input" id="dest-besttime">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dest-fee">Entry Fee</label>
+                <input type="text" class="form-input" id="dest-fee" placeholder="e.g. ₹50 or Free">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-hours">Opening Hours</label>
+              <input type="text" class="form-input" id="dest-hours">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-tips">Visitor Tips (one per line)</label>
+              <textarea class="form-textarea" id="dest-tips" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="dest-nearby">Nearby Attractions (one per line)</label>
+              <textarea class="form-textarea" id="dest-nearby" rows="3"></textarea>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; gap: var(--space-sm);">
+              <input type="checkbox" id="dest-featured">
+              <label for="dest-featured" style="font-size: var(--text-sm);">Featured destination</label>
+            </div>
+            <div style="display: flex; gap: var(--space-md);">
+              <button type="submit" class="btn btn--primary" id="dest-submit-btn">Add Destination</button>
+              <button type="button" class="btn btn--ghost" id="dest-cancel-btn" style="display: none;">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <div id="admin-destinations">
+          <div class="loading"><div class="loading__spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- Reviews Panel -->
+      <div class="tab-panel" id="panel-reviews">
+        <div id="admin-reviews">
+          <div class="loading"><div class="loading__spinner"></div></div>
+        </div>
+      </div>
+
+      <!-- Users Panel -->
+      <div class="tab-panel" id="panel-users">
+        <div id="admin-users">
+          <div class="loading"><div class="loading__spinner"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><div class="footer__bottom">&copy; 2026 Roamly. All rights reserved.</div></div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

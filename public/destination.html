@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Detailed information and visitor reviews for this tourist destination.">
+  <title>Destination — Roamly</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link">Home</a>
+        <a href="/explore.html" class="nav__link">Explore</a>
+        <a href="/write-review.html" class="nav__link">Write a Review</a>
+      </div>
+      <div class="nav__auth" id="nav-auth"></div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span><span class="nav__toggle-line"></span><span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <a href="/write-review.html" class="nav__link">Write a Review</a>
+      <div id="nav-mobile-auth"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    <div class="container">
+      <div style="padding: var(--space-md) 0;">
+        <a href="/explore.html" style="font-size: var(--text-sm); color: var(--color-charcoal-light);">← Back to Explore</a>
+      </div>
+      <div id="dest-content">
+        <div class="loading"><div class="loading__spinner"></div></div>
+      </div>
+    </div>
+    <div style="height: var(--space-3xl);"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">&copy; 2026 Roamly. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/destination.js"></script>
+</body>
+</html>

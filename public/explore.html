@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore tourist destinations across India. Search, filter, and discover places worth visiting.">
+  <title>Explore Destinations — Roamly</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link">Home</a>
+        <a href="/explore.html" class="nav__link nav__link--active">Explore</a>
+        <a href="/write-review.html" class="nav__link">Write a Review</a>
+      </div>
+      <div class="nav__auth" id="nav-auth"></div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span><span class="nav__toggle-line"></span><span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <a href="/write-review.html" class="nav__link">Write a Review</a>
+      <div id="nav-mobile-auth"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-header__title">Explore Destinations</h1>
+        <p class="page-header__subtitle" id="destinations-count">Discover tourist spots across India</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="filters">
+        <div class="filters__group" style="flex: 1; min-width: 200px;">
+          <label class="filters__label" for="explore-search">Search</label>
+          <input type="text" class="filters__input" id="explore-search" placeholder="Name, city, or state...">
+        </div>
+        <div class="filters__group">
+          <label class="filters__label" for="explore-category">Category</label>
+          <select class="filters__select" id="explore-category">
+            <option value="">All Categories</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Beaches">Beaches</option>
+            <option value="Historical">Historical</option>
+            <option value="Nature & Wildlife">Nature & Wildlife</option>
+            <option value="Spiritual">Spiritual</option>
+            <option value="Adventure">Adventure</option>
+            <option value="Hill Stations">Hill Stations</option>
+            <option value="Heritage">Heritage</option>
+            <option value="Urban">Urban</option>
+          </select>
+        </div>
+        <div class="filters__group">
+          <label class="filters__label" for="explore-rating">Min Rating</label>
+          <select class="filters__select" id="explore-rating">
+            <option value="">Any Rating</option>
+            <option value="4">4★ & above</option>
+            <option value="3">3★ & above</option>
+            <option value="2">2★ & above</option>
+          </select>
+        </div>
+        <div class="filters__group">
+          <label class="filters__label" for="explore-sort">Sort By</label>
+          <select class="filters__select" id="explore-sort">
+            <option value="newest">Recently Added</option>
+            <option value="rating">Highest Rated</option>
+            <option value="reviews">Most Reviewed</option>
+            <option value="name">Alphabetical</option>
+          </select>
+        </div>
+        <div class="filters__group" style="align-self: flex-end;">
+          <button class="btn btn--ghost btn--sm" id="explore-clear">Clear Filters</button>
+        </div>
+      </div>
+
+      <div id="destinations-grid">
+        <div class="loading"><div class="loading__spinner"></div></div>
+      </div>
+      <div id="destinations-pagination"></div>
+    </div>
+
+    <div style="height: var(--space-3xl);"></div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__bottom">
+        &copy; 2026 Roamly. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/explore.js"></script>
+</body>
+</html>

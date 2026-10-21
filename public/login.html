@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Log in to your Roamly account to write reviews and share your travel experiences.">
+  <title>Log In — Roamly</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link">Home</a>
+        <a href="/explore.html" class="nav__link">Explore</a>
+      </div>
+      <div class="nav__auth" id="nav-auth"></div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span><span class="nav__toggle-line"></span><span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <div id="nav-mobile-auth"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    <div class="auth-page">
+      <div class="auth-card">
+        <h1 class="auth-card__title">Welcome back</h1>
+        <p class="auth-card__subtitle">Log in to your Roamly account.</p>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label class="form-label" for="login-email">Email</label>
+            <input type="email" class="form-input" id="login-email" required autocomplete="email" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" class="form-input" id="login-password" required autocomplete="current-password" placeholder="Enter your password">
+          </div>
+          <button type="submit" class="btn btn--primary btn--full btn--lg" id="login-btn">Log In</button>
+        </form>
+
+        <p class="auth-card__footer">
+          Don't have an account? <a href="/register.html">Sign up</a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('login-btn');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) { toast.error('Please fill in all fields.'); return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Logging in...';
+
+      try {
+        const res = await api.post('/auth/login', { email, password });
+        if (res && res.token) localStorage.setItem('roamly_token', res.token);
+        toast.success('Logged in successfully!');
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get('redirect') || '/';
+        setTimeout(() => window.location.href = redirect, 500);
+      } catch (error) {
+        toast.error(error.message);
+        btn.disabled = false;
+        btn.textContent = 'Log In';
+      }
+    });
+  </script>
+</body>
+</html>

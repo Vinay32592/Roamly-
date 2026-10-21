@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Share your travel experience by writing a review on Roamly.">
+  <title>Write a Review — Roamly</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+</head>
+<body>
+
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav__inner">
+      <a href="/" class="nav__brand">
+        <svg class="nav__brand-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
+        Roamly
+      </a>
+      <div class="nav__links">
+        <a href="/" class="nav__link">Home</a>
+        <a href="/explore.html" class="nav__link">Explore</a>
+        <a href="/write-review.html" class="nav__link nav__link--active">Write a Review</a>
+      </div>
+      <div class="nav__auth" id="nav-auth"></div>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span class="nav__toggle-line"></span><span class="nav__toggle-line"></span><span class="nav__toggle-line"></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="nav-mobile">
+      <a href="/" class="nav__link">Home</a>
+      <a href="/explore.html" class="nav__link">Explore</a>
+      <a href="/write-review.html" class="nav__link">Write a Review</a>
+      <div id="nav-mobile-auth"></div>
+    </div>
+  </nav>
+
+  <main class="page-content">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-header__title" id="review-form-title">Write a Review</h1>
+        <p class="page-header__subtitle">Share your experience to help other travellers.</p>
+      </div>
+    </div>
+
+    <div class="container container--narrow" style="padding-top: var(--space-2xl); padding-bottom: var(--space-3xl);">
+      <form id="review-form" class="auth-card" style="max-width: 100%;">
+        <div class="form-group">
+          <label class="form-label" for="review-destination">Destination</label>
+          <select class="form-select" id="review-destination" required>
+            <option value="">Select a destination...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Your Rating</label>
+          <div style="display: flex; align-items: center; gap: var(--space-md);">
+            <div class="star-input" id="star-input"></div>
+            <span id="rating-value" style="font-size: var(--text-sm); color: var(--color-charcoal-light);">Select a rating</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-title">Review Title</label>
+          <input type="text" class="form-input" id="review-title" required maxlength="150" placeholder="Summarize your experience">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-comment">Your Review</label>
+          <textarea class="form-textarea" id="review-comment" required maxlength="2000" rows="6" placeholder="Share the details of your experience — what you liked, what to expect, and tips for other visitors."></textarea>
+          <span class="char-count" id="comment-counter">0/2000</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review-visit-date">Date Visited (optional)</label>
+          <input type="date" class="form-input" id="review-visit-date">
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full btn--lg" id="review-submit-btn">Submit Review</button>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container"><div class="footer__bottom">&copy; 2026 Roamly. All rights reserved.</div></div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/reviews.js"></script>
+</body>
+</html>
