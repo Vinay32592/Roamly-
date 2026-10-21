@@ -55,7 +55,6 @@ Travelers exploring tourist destinations in India often face scattered, unverifi
 ```text
 Roamly/
 ├── .env                  # Environment configuration
-├── .env.example          # Environment template
 ├── .gitignore            # Git ignore rules
 ├── package.json          # Dependencies and scripts (start, dev, seed)
 ├── server.js             # Server entry point with MongoDB connection
@@ -96,7 +95,7 @@ npm install
 
 ### 3. Environment Configuration
 
-Create a `.env` file in the root directory (or copy from `.env.example`):
+Create a `.env` file in the root directory:
 
 ```ini
 PORT=3000
