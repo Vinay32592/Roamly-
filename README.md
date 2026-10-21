@@ -1,5 +1,11 @@
 # Roamly — Tourist Spot Review Portal
 
+[![Node.js](https://img.shields.io/badge/Node.js-v18+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express-5.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?logo=render&logoColor=white)](https://render.com/)
+[![JavaScript](https://img.shields.io/badge/ES6+-Vanilla%20JS-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org/)
+
 A complete, full-stack web application for discovering Indian tourist destinations, reading authentic visitor reviews, rating attractions, and sharing travel experiences.
 
 ---
@@ -112,17 +118,10 @@ ADMIN_USERNAME=admin
 
 ### 4. Database Seeding
 
-Run the seed command to populate Indian destinations, initialize the admin account, and insert sample community reviews:
+Run the seed command to populate all 38 Indian destinations, initialize the admin account, and insert sample community reviews:
 
 ```bash
 npm run seed
-```
-
-Or run individual seed scripts:
-```bash
-npm run seed:destinations   # Seeds 38 Indian tourist destinations
-npm run create-admin        # Initializes admin account
-npm run seed:reviews        # Seeds sample users and reviews
 ```
 
 ### 5. Start the Application
@@ -152,6 +151,11 @@ Visit **`http://localhost:3000`** in your browser.
 ---
 
 ## 📡 REST API Reference
+
+### System & Health (`/api/health`)
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| `GET` | `/api/health` | Live system uptime, MongoDB connection state, and record counts | Public |
 
 ### Authentication (`/api/auth`)
 | Method | Endpoint | Description | Access |
@@ -229,6 +233,33 @@ Roamly uses Mongoose ODM with three primary relational models:
    - Fields: `destination` (ref to Destination), `user` (ref to User), `rating` (1–5), `title`, `comment`, `visitDate`, `helpfulVotes`.
    - Enforces compound unique index: `{ destination: 1, user: 1 }, { unique: true }` to guarantee a user can only review each place once.
    - Triggers `Review.calcAverageRating()` via post-save and post-delete hooks to automatically maintain destination aggregate ratings.
+
+---
+
+## 🌐 Cloud Deployment (MongoDB Atlas + Render)
+
+Roamly is production-ready for deployment with zero code modifications:
+
+### 1. Database (MongoDB Atlas)
+1. Create a free **M0 cluster** on [MongoDB Atlas](https://www.mongodb.com/atlas).
+2. Under **Security → Network Access**, add `0.0.0.0/0` (Allow Access from Anywhere) so cloud hosting platforms can connect.
+3. Under **Database Access**, create a user and copy the connection string:
+   ```text
+   mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/roamly?retryWrites=true&w=majority
+   ```
+4. Seed the cloud database: run `npm run seed` with your Atlas connection string set in `.env`.
+
+### 2. Web Hosting (Render)
+1. Link your GitHub repository (`Vinay32592/Roamly-`) on [Render](https://render.com) as a **Web Service**.
+2. Settings:
+   - **Runtime:** `Node`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+3. Add Environment Variables:
+   - `MONGODB_URI` = *(Your MongoDB Atlas connection URI)*
+   - `JWT_SECRET` = *(Secure random secret key)*
+   - `NODE_ENV` = `production`
+4. Live verification: visit `https://<your-service>.onrender.com/api/health` to confirm the cloud connection.
 
 ---
 
