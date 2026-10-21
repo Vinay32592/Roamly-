@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/api', apiRoutes);
 
 // Page routes
-const pages = ['explore', 'destination', 'login', 'register', 'write-review', 'profile', 'admin', 'privacy', 'terms'];
+const pages = ['explore', 'destination', 'login', 'register', 'write-review', 'profile', 'admin'];
 pages.forEach(page => {
   app.get(`/${page}`, (req, res) => res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`)));
   app.get(`/${page}.html`, (req, res) => res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`)));

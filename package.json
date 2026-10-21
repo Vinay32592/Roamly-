@@ -8,15 +8,6 @@
     "dev": "nodemon server.js",
     "seed": "node scripts/seed.js"
   },
-  "keywords": [
-    "travel",
-    "tourism",
-    "reviews",
-    "india",
-    "destinations"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
