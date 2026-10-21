@@ -108,12 +108,6 @@ PORT=3000
 MONGODB_URI=mongodb://127.0.0.1:27017/roamly
 JWT_SECRET=your_secret_key_here
 NODE_ENV=development
-
-# Admin credentials
-ADMIN_EMAIL=admin@roamly.com
-ADMIN_PASSWORD=Admin@123
-ADMIN_NAME=Roamly Admin
-ADMIN_USERNAME=admin
 ```
 
 ### 4. Database Seeding
@@ -136,12 +130,7 @@ Visit **`http://localhost:3000`** in your browser.
 
 ---
 
-## 🔑 Demo Credentials
-
-### Administrator Account
-- **Email:** `admin@roamly.com`
-- **Password:** `Admin@123`
-- **Capabilities:** Admin Dashboard, manage destinations, delete any review, suspend/activate user accounts.
+## 🔑 Demo Community Accounts
 
 ### Community User Accounts
 - **User 1:** `priya@example.com` / `Password@123` (Priya Sharma — `@priya_travels`)
