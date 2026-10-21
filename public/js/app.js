@@ -1,9 +1,10 @@
-/* ============================================
-   ROAMLY — API Utility Module
-   ============================================ */
+/* ==========================================================================
+   ROAMLY — Client Application Core (API, Auth & UI Utilities)
+   ========================================================================== */
 
 const API_BASE = '/api';
 
+/* --- REST API Client --- */
 const api = {
   async request(endpoint, options = {}) {
     const url = `${API_BASE}${endpoint}`;
@@ -56,7 +57,7 @@ const api = {
   }
 };
 
-/* --- Toast System --- */
+/* --- Toast Notification System --- */
 const toast = {
   container: null,
 
@@ -94,7 +95,7 @@ const toast = {
   warning(msg) { this.show(msg, 'warning'); }
 };
 
-/* --- Star Rating HTML --- */
+/* --- Star Rating Renderer --- */
 function renderStars(rating, showValue = true, count = null) {
   let html = '<span class="stars">';
   for (let i = 1; i <= 5; i++) {
@@ -112,7 +113,7 @@ function renderStars(rating, showValue = true, count = null) {
   return html;
 }
 
-/* --- Image Error Handling --- */
+/* --- Image Fallback Handler --- */
 function handleImageError(img, fallbackText) {
   img.onerror = null;
   const parent = img.parentElement;
@@ -123,20 +124,20 @@ function handleImageError(img, fallbackText) {
   parent.appendChild(fallback);
 }
 
-/* --- Date Formatting --- */
+/* --- Date Formatter --- */
 function formatDate(dateStr) {
   if (!dateStr) return '';
   const d = new Date(dateStr);
   return d.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
-/* --- Get Initials --- */
+/* --- User Initials --- */
 function getInitials(name) {
   if (!name) return '?';
   return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
-/* --- Confirm Modal --- */
+/* --- Confirmation Modal --- */
 function showConfirm(title, text) {
   return new Promise((resolve) => {
     const overlay = document.createElement('div');
@@ -167,7 +168,7 @@ function showConfirm(title, text) {
   });
 }
 
-/* --- Destination Card HTML --- */
+/* --- Destination Card Generator --- */
 function renderDestinationCard(dest) {
   const img = dest.images && dest.images[0] ? dest.images[0] : '';
   return `
@@ -195,12 +196,11 @@ function renderDestinationCard(dest) {
   `;
 }
 
-/* --- Loading State --- */
+/* --- UI State Helpers --- */
 function showLoading(container) {
   container.innerHTML = '<div class="loading"><div class="loading__spinner"></div></div>';
 }
 
-/* --- Empty State --- */
 function showEmpty(container, title, text) {
   container.innerHTML = `
     <div class="empty-state">
@@ -211,7 +211,7 @@ function showEmpty(container, title, text) {
   `;
 }
 
-/* --- Pagination --- */
+/* --- Pagination Controls --- */
 function renderPagination(pagination, onPageChange) {
   if (!pagination || pagination.pages <= 1) return '';
 
@@ -229,20 +229,147 @@ function renderPagination(pagination, onPageChange) {
     html += `<button class="pagination__btn ${i === pagination.page ? 'pagination__btn--active' : ''}" onclick="${fnName}(${i})">${i}</button>`;
   }
 
-  html += `<button class="pagination__btn" ${pagination.page >= pagination.pages ? 'disabled' : ''} onclick="${fnName}(${pagination.page + 1})">Next →</button>`;
+  html += `<button class="pagination__btn ${pagination.page >= pagination.pages ? 'disabled' : ''} onclick="${fnName}(${pagination.page + 1})">Next →</button>`;
   html += '</div>';
   return html;
 }
 
-/* --- Category Icons (SVG-based) --- */
-const categoryIcons = {
-  'Mountains': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>',
-  'Beaches': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="17" cy="5" r="3"/><path d="M3 20c2.5-3.5 8-3.5 10.5 0"/><path d="M12.5 20c2-3 6-3 8.5 0"/><path d="M19 13c-2 1-4.5 1-7 0s-5-1-7 0"/></svg>',
-  'Historical': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M3 7v14M21 7v14M6 7V4l6-2 6 2v3M9 21v-4h6v4M9 7h6M12 7v4"/></svg>',
-  'Nature & Wildlife': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 20h10M10 20c5.5-2.5.8-6.4 3-10 .1-4 3-7.5 3-7.5S13 6 10 10c-2.2 3.6-7.5 7.5-3 10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2 3.7"/></svg>',
-  'Spiritual': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>',
-  'Adventure': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
-  'Hill Stations': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.7 7.7A7.1 7.1 0 0 0 6.3 7.7c-1.7.9-2.8 2.6-2.8 4.5 0 2.5 1.8 4.6 4.3 5a6 6 0 0 0 8.4 0c2.5-.4 4.3-2.5 4.3-5 0-1.9-1.1-3.6-2.8-4.5z"/></svg>',
-  'Heritage': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="10" rx="1"/><path d="M12 2L3 11h18L12 2z"/><path d="M8 21v-4h3v4M13 21v-4h3v4"/></svg>',
-  'Urban': '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="6" width="8" height="15"/><rect x="9" y="2" width="6" height="19"/><rect x="15" y="9" width="8" height="12"/><path d="M4 9h2M4 12h2M4 15h2M11 5h2M11 8h2M11 11h2M11 14h2M18 12h2M18 15h2"/></svg>'
-};
+/* --- Authentication & Navigation Management --- */
+let currentUser = null;
+
+async function checkAuth() {
+  try {
+    const data = await api.get('/auth/me');
+    currentUser = data.user;
+    updateNavAuth();
+    return currentUser;
+  } catch (e) {
+    currentUser = null;
+    updateNavAuth();
+    return null;
+  }
+}
+
+function updateNavAuth() {
+  const authLinks = document.getElementById('nav-auth');
+  const mobileAuth = document.getElementById('nav-mobile-auth');
+  if (!authLinks) return;
+
+  if (currentUser) {
+    const initials = getInitials(currentUser.name);
+    authLinks.innerHTML = `
+      <div class="nav__user" id="nav-user-toggle">
+        <div class="nav__avatar">${initials}</div>
+        <span>${currentUser.name.split(' ')[0]}</span>
+        <div class="nav__dropdown" id="nav-dropdown">
+          <a href="/profile.html" class="nav__dropdown-item">My Profile</a>
+          <a href="/write-review.html" class="nav__dropdown-item">Write a Review</a>
+          ${currentUser.role === 'admin' ? '<a href="/admin.html" class="nav__dropdown-item">Admin Dashboard</a>' : ''}
+          <div class="nav__dropdown-divider"></div>
+          <a href="#" class="nav__dropdown-item" id="nav-logout">Log Out</a>
+        </div>
+      </div>
+    `;
+
+    // Dropdown toggle
+    const toggle = document.getElementById('nav-user-toggle');
+    const dropdown = document.getElementById('nav-dropdown');
+    toggle.addEventListener('click', (e) => {
+      if (e.target.closest('.nav__dropdown-item')) return;
+      e.stopPropagation();
+      dropdown.classList.toggle('nav__dropdown--open');
+    });
+    document.addEventListener('click', () => {
+      dropdown.classList.remove('nav__dropdown--open');
+    });
+
+    // Logout
+    document.getElementById('nav-logout').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await api.post('/auth/logout');
+        localStorage.removeItem('roamly_token');
+        currentUser = null;
+        toast.success('Logged out successfully.');
+        setTimeout(() => window.location.href = '/', 500);
+      } catch (err) {
+        toast.error('Logout failed.');
+      }
+    });
+  } else {
+    authLinks.innerHTML = `
+      <a href="/login.html" class="btn btn--ghost btn--sm">Log In</a>
+      <a href="/register.html" class="btn btn--primary btn--sm">Sign Up</a>
+    `;
+  }
+
+  // Mobile auth
+  if (mobileAuth) {
+    if (currentUser) {
+      mobileAuth.innerHTML = `
+        <a href="/profile.html" class="nav__link">My Profile</a>
+        <a href="/write-review.html" class="nav__link">Write a Review</a>
+        ${currentUser.role === 'admin' ? '<a href="/admin.html" class="nav__link">Admin Dashboard</a>' : ''}
+        <a href="#" class="nav__link" id="nav-mobile-logout">Log Out</a>
+      `;
+      const mobileLogout = document.getElementById('nav-mobile-logout');
+      if (mobileLogout) {
+        mobileLogout.addEventListener('click', async (e) => {
+          e.preventDefault();
+          await api.post('/auth/logout');
+          localStorage.removeItem('roamly_token');
+          currentUser = null;
+          window.location.href = '/';
+        });
+      }
+    } else {
+      mobileAuth.innerHTML = `
+        <a href="/login.html" class="nav__link">Log In</a>
+        <a href="/register.html" class="nav__link">Sign Up</a>
+      `;
+    }
+  }
+}
+
+function requireAuth() {
+  if (!currentUser) {
+    toast.warning('Please log in to continue.');
+    setTimeout(() => {
+      window.location.href = `/login.html?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+    }, 500);
+    return false;
+  }
+  return true;
+}
+
+function requireAdmin() {
+  if (!currentUser || currentUser.role !== 'admin') {
+    toast.error('Access denied.');
+    setTimeout(() => window.location.href = '/', 500);
+    return false;
+  }
+  return true;
+}
+
+function initMobileNav() {
+  const toggle = document.getElementById('nav-toggle');
+  const mobileMenu = document.getElementById('nav-mobile');
+  if (!toggle || !mobileMenu) return;
+
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('nav__toggle--open');
+    mobileMenu.classList.toggle('nav__mobile--open');
+  });
+
+  mobileMenu.addEventListener('click', (e) => {
+    if (e.target.closest('.nav__link')) {
+      toggle.classList.remove('nav__toggle--open');
+      mobileMenu.classList.remove('nav__mobile--open');
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  checkAuth();
+  initMobileNav();
+});

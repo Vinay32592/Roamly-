@@ -3,7 +3,8 @@ const helmet = require('helmet');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const errorHandler = require('./middleware/errorHandler');
+const apiRoutes = require('./routes');
+const { errorHandler } = require('./middleware');
 
 const app = express();
 
@@ -24,43 +25,28 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files
+// Serve static frontend assets
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// API routes
-app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api/destinations', require('./routes/destinationRoutes'));
-app.use('/api/reviews', require('./routes/reviewRoutes'));
-app.use('/api/users', require('./routes/userRoutes'));
-app.use('/api/admin', require('./routes/adminRoutes'));
+// Mount unified API routes
+app.use('/api', apiRoutes);
 
-// SPA-style routing – serve HTML pages for known routes
+// Page routes
 const pages = ['explore', 'destination', 'login', 'register', 'write-review', 'profile', 'admin', 'privacy', 'terms'];
 pages.forEach(page => {
-  app.get(`/${page}`, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`));
-  });
-  app.get(`/${page}.html`, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`));
-  });
+  app.get(`/${page}`, (req, res) => res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`)));
+  app.get(`/${page}.html`, (req, res) => res.sendFile(path.join(__dirname, '..', 'public', `${page}.html`)));
 });
 
-// Root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
-});
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
 
-// 404 for API routes
-app.use('/api', (req, res) => {
-  res.status(404).json({ success: false, message: 'API endpoint not found.' });
-});
+// 404 for API endpoints
+app.use('/api', (req, res) => res.status(404).json({ success: false, message: 'API endpoint not found.' }));
 
-// 404 for other routes
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, '..', 'public', '404.html'));
-});
+// 404 for frontend pages
+app.use((req, res) => res.status(404).sendFile(path.join(__dirname, '..', 'public', '404.html')));
 
-// Error handler
+// Global error handler
 app.use(errorHandler);
 
 module.exports = app;

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const Destination = require('../src/models/Destination');
+const { User, Destination, Review } = require('../src/models');
 
 const destinations = [
   {
@@ -539,7 +539,82 @@ async function seedDestinations() {
   }
 
   const total = await Destination.countDocuments();
-  console.log(`Done! Total destinations seeded: ${total}`);
+  console.log(`✓ Destinations synced: ${total}`);
+
+  // 2. Seed Admin User
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@roamly.com';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
+  const adminName = process.env.ADMIN_NAME || 'Roamly Admin';
+  const adminUsername = process.env.ADMIN_USERNAME || 'admin';
+  const existingAdmin = await User.findOne({ email: adminEmail });
+  if (!existingAdmin) {
+    await User.create({
+      name: adminName,
+      username: adminUsername,
+      email: adminEmail,
+      password: adminPassword,
+      role: 'admin'
+    });
+    console.log(`✓ Admin user created: ${adminEmail}`);
+  } else {
+    console.log(`- Admin user exists: ${adminEmail}`);
+  }
+
+  // 3. Seed Sample Users & Reviews
+  const sampleUsers = [
+    { name: 'Priya Sharma', username: 'priya_travels', email: 'priya@example.com', password: 'Password@123', role: 'user' },
+    { name: 'Rahul Verma', username: 'rahul_v', email: 'rahul@example.com', password: 'Password@123', role: 'user' },
+    { name: 'Ananya Iyer', username: 'ananya_i', email: 'ananya@example.com', password: 'Password@123', role: 'user' },
+    { name: 'Vikram Malhotra', username: 'vikram_m', email: 'vikram@example.com', password: 'Password@123', role: 'user' },
+    { name: 'Sneha Patel', username: 'sneha_p', email: 'sneha@example.com', password: 'Password@123', role: 'user' }
+  ];
+
+  const createdUsers = [];
+  for (const u of sampleUsers) {
+    let user = await User.findOne({ email: u.email });
+    if (!user) user = await User.create(u);
+    createdUsers.push(user);
+  }
+
+  const sampleReviews = [
+    { destName: 'Araku Valley', uIdx: 0, rating: 5, title: 'Breathtaking train journey', comment: 'The scenic Vistadome train ride from Visakhapatnam to Araku is something every traveler must experience.', helpful: 14 },
+    { destName: 'Hampi', uIdx: 1, rating: 5, title: 'Surreal boulder landscapes', comment: 'Hampi is unlike anywhere else on earth. The Vijaya Vittala temple complex and Stone Chariot gave me chills.', helpful: 23 },
+    { destName: 'Tirupati (Tirumala)', uIdx: 2, rating: 5, title: 'Deeply divine spiritual experience', comment: 'The spiritual energy at Tirumala is indescribable. Queue management and Laddu prasadam are unmatched.', helpful: 31 },
+    { destName: 'Goa Beaches', uIdx: 3, rating: 5, title: 'Palolem is pure coastal paradise', comment: 'Calm crescent bay ideal for swimming. Took a morning boat trip and spotted wild dolphins.', helpful: 17 },
+    { destName: 'Munnar', uIdx: 4, rating: 5, title: 'Endless emerald tea gardens', comment: 'Driving through Munnar feels like moving inside a postcard. Trekked to Top Station for panoramic views.', helpful: 15 },
+    { destName: 'Jaipur', uIdx: 0, rating: 4, title: 'Majestic Amber Fort', comment: 'Amber Fort’s Sheesh Mahal was the highlight. The mirror work is unbelievable.', helpful: 11 },
+    { destName: 'Varanasi', uIdx: 1, rating: 5, title: 'Soul-stirring Ganga Aarti', comment: 'Experiencing the evening Aarti from a wooden rowing boat in the middle of the Ganges is an indelible memory.', helpful: 28 },
+    { destName: 'Rishikesh', uIdx: 2, rating: 5, title: 'Adrenaline on the river', comment: 'The 16km river rafting stretch with certified guides was exhilarating. Ashrams at sunset are peaceful.', helpful: 19 },
+    { destName: 'Gokarna', uIdx: 3, rating: 5, title: 'Om Beach is pure magic', comment: 'The natural Om-shaped coastline is unlike any beach I have visited in India. Clean and tranquil.', helpful: 19 },
+    { destName: 'Kaziranga National Park', uIdx: 4, rating: 5, title: 'Incredible rhino sightings', comment: 'Saw over ten one-horned rhinos during morning safari in the Bagori zone! Magnificent wildlife.', helpful: 24 },
+    { destName: 'Valley of Flowers', uIdx: 0, rating: 5, title: 'Enchanting alpine blooms', comment: 'Thousands of endemic flowers blanketed the meadow under mist-shrouded glaciers.', helpful: 35 },
+    { destName: 'Wayanad', uIdx: 1, rating: 5, title: 'Lush spice plantations', comment: 'Green, peaceful, and clean. Neolithic rock carvings at Edakkal Caves were fascinating.', helpful: 17 }
+  ];
+
+  for (const r of sampleReviews) {
+    const dest = await Destination.findOne({ name: r.destName });
+    if (!dest) continue;
+    const user = createdUsers[r.uIdx % createdUsers.length];
+    const existingRev = await Review.findOne({ user: user._id, destination: dest._id });
+    if (!existingRev) {
+      await Review.create({
+        user: user._id,
+        destination: dest._id,
+        rating: r.rating,
+        title: r.title,
+        comment: r.comment,
+        helpfulVotes: r.helpful
+      });
+    }
+  }
+
+  // Recalculate destination rating aggregates
+  const allDests = await Destination.find({});
+  for (const d of allDests) {
+    await Review.calcAverageRating(d._id);
+  }
+
+  console.log('✓ Seeding complete: destinations, admin account, and verified community reviews are ready!');
   process.exit(0);
 }
 

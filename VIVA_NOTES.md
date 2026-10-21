@@ -41,14 +41,14 @@ Roamly is built on the **Traditional Multi-Tier Client-Server Architecture** usi
 1. **DNS & Connection**: The browser issues a `GET /` request to `http://localhost:3000/`.
 2. **Express Route Handler**: Express matches `app.get('/', ...)` in `src/app.js` and serves `public/index.html`.
 3. **Asset Resolution**:
-   - The HTML requests `public/css/style.css` and `public/css/responsive.css` (cached and rendered).
-   - The HTML requests scripts `public/js/api.js`, `public/js/auth.js`, and `public/js/home.js`.
+   - The HTML requests `public/css/style.css` (cached and rendered, containing complete layout and responsive rules).
+   - The HTML requests scripts `public/js/app.js` (core API & auth) and `public/js/pages.js` (page interactions).
 4. **Natural Atmosphere Canvas**:
-   - `public/js/home.js` executes `initNaturalAtmosphere()`, drawing a lightweight 30-frame particle system rendering drifting golden sunlight motes over the panoramic hero banner.
+   - `public/js/pages.js` executes `initNaturalAtmosphere()`, drawing a lightweight 30-frame particle system rendering drifting golden sunlight motes over the panoramic hero banner.
 5. **Session Check**:
-   - `public/js/auth.js` calls `GET /api/auth/me`. If the user has a valid `jwt` cookie, the navbar displays their username and a dropdown; otherwise, it displays "Log In" and "Register".
+   - `public/js/app.js` calls `GET /api/auth/me`. If the user has a valid `jwt` cookie, the navbar displays their username and a dropdown; otherwise, it displays "Log In" and "Register".
 6. **Featured Spots Fetch**:
-   - `public/js/home.js` issues `GET /api/destinations?featured=true&limit=6` using `fetch()`.
+   - `public/js/pages.js` issues `GET /api/destinations?featured=true&limit=6` using `fetch()`.
    - Express queries MongoDB `Destination.find({ isFeatured: true }).limit(6)`.
    - The client renders the destination cards into `#featured-grid`. Each card is clickable and navigates to `destination.html?id=<_id>`.
 
@@ -56,10 +56,10 @@ Roamly is built on the **Traditional Multi-Tier Client-Server Architecture** usi
 
 ## 3. How the Frontend Communicates with Express
 
-All client-server communication uses the standard browser **`window.fetch()`** API wrapped in a clean utility class `api` inside `public/js/api.js`:
+All client-server communication uses the standard browser **`window.fetch()`** API wrapped in a clean utility class `api` inside `public/js/app.js`:
 
 ```javascript
-// Example helper in public/js/api.js
+// Example helper in public/js/app.js
 async request(endpoint, options = {}) {
   const url = `${this.baseUrl}${endpoint}`;
   const config = {

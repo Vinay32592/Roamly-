@@ -57,60 +57,23 @@ Roamly/
 ├── .env                  # Environment configuration
 ├── .env.example          # Environment template
 ├── .gitignore            # Git ignore rules
-├── package.json          # Dependencies and scripts
-├── server.js             # HTTP server entry point
+├── package.json          # Dependencies and scripts (start, dev, seed)
+├── server.js             # Server entry point with MongoDB connection
 ├── scripts/
-│   ├── seed.js           # Seeds all 38 Indian tourist destinations
-│   ├── seedReviews.js    # Seeds realistic user profiles & reviews
-│   └── createAdmin.js    # Creates initial administrator account
+│   └── seed.js           # Seeds 38 Indian destinations, admin user & reviews
 ├── src/
-│   ├── app.js            # Express app configuration & middleware
-│   ├── config/
-│   │   └── database.js   # MongoDB Mongoose connection
-│   ├── controllers/
-│   │   ├── adminController.js       # Admin stats, moderation & user status
-│   │   ├── authController.js        # Register, login, logout, me
-│   │   ├── destinationController.js # Destination CRUD & category queries
-│   │   ├── reviewController.js      # Review CRUD & helpful voting
-│   │   └── userController.js        # User profile read & update
-│   ├── middleware/
-│   │   ├── auth.js                  # JWT protect, adminOnly, optionalAuth
-│   │   ├── errorHandler.js          # Centralized error handler
-│   │   └── validators.js            # Input validation & sanitization schemas
-│   ├── models/
-│   │   ├── Destination.js           # Destination schema & text index
-│   │   ├── Review.js                # Review schema & calcAverageRating hooks
-│   │   └── User.js                  # User schema & bcrypt methods
-│   └── routes/
-│       ├── adminRoutes.js           # /api/admin
-│       ├── authRoutes.js            # /api/auth
-│       ├── destinationRoutes.js     # /api/destinations
-│       ├── reviewRoutes.js          # /api/reviews
-│       └── userRoutes.js            # /api/users
+│   ├── app.js            # Express app configuration, security & static serving
+│   ├── models.js         # Mongoose schemas (User, Destination, Review) & hooks
+│   ├── middleware.js     # JWT auth, error handler & validation rules
+│   └── routes.js         # Unified REST API router (/auth, /destinations, /reviews, etc.)
 └── public/
-    ├── index.html         # Home page with natural animated background & featured spots
-    ├── explore.html       # Search, filter, and pagination browse page
-    ├── destination.html   # Destination detail with gallery & visitor reviews
-    ├── write-review.html  # Review submission form with star rating input
-    ├── profile.html       # User profile and review management
-    ├── admin.html         # Admin dashboard and moderation panel
-    ├── login.html         # User sign-in page
-    ├── register.html      # Account creation page
-    ├── 404.html           # Custom 404 page
-    ├── privacy.html       # Privacy policy
-    ├── terms.html         # Terms of service
     ├── css/
-    │   ├── style.css      # Core design tokens, components, natural animations
-    │   └── responsive.css # Media queries and mobile layout adaptions
-    └── js/
-        ├── api.js         # API client, toast notifications, card renderer
-        ├── auth.js        # Session check, nav state & route guards
-        ├── home.js        # Home page natural particle atmosphere & interaction
-        ├── explore.js     # Search, filter, sort & pagination
-        ├── destination.js # Detail page, thumbnail gallery & review interaction
-        ├── reviews.js     # Review creation and edit form
-        ├── profile.js     # User profile management
-        └── admin.js       # Admin stats & data management
+    │   └── style.css     # Unified styles & responsive breakpoints
+    ├── js/
+    │   ├── app.js        # Core API client, auth session, toast & UI helpers
+    │   └── pages.js      # Page views & interactions (Home, Explore, Reviews, Admin)
+    ├── images/destinations/ # 38 optimized Indian destination images
+    └── *.html            # Clean semantic HTML pages
 ```
 
 ---
