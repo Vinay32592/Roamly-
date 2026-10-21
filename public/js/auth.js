@@ -129,12 +129,12 @@ function initMobileNav() {
     mobileMenu.classList.toggle('nav__mobile--open');
   });
 
-  // Close on link click
-  mobileMenu.querySelectorAll('.nav__link').forEach(link => {
-    link.addEventListener('click', () => {
+  // Close on any link click (handles dynamic auth links)
+  mobileMenu.addEventListener('click', (e) => {
+    if (e.target.closest('.nav__link')) {
       toggle.classList.remove('nav__toggle--open');
       mobileMenu.classList.remove('nav__mobile--open');
-    });
+    }
   });
 }
 

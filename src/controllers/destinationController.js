@@ -99,7 +99,7 @@ exports.updateDestination = async (req, res, next) => {
     const destination = await Destination.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true, runValidators: true }
+      { returnDocument: 'after', runValidators: true }
     );
     if (!destination) {
       return res.status(404).json({ success: false, message: 'Destination not found.' });

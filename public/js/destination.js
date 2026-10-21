@@ -55,7 +55,7 @@ function renderDestination(container, d) {
         ${hasMultiple ? `
           <div class="dest-detail__thumbnails" style="display: flex; gap: var(--space-sm); margin-top: var(--space-sm); overflow-x: auto;">
             ${d.images.map((imgUrl, i) => `
-              <img src="${imgUrl}" alt="${d.name} preview ${i + 1}" style="width: 80px; height: 56px; object-fit: cover; border-radius: var(--radius-sm); cursor: pointer; border: 2px solid ${i === 0 ? 'var(--color-terracotta)' : 'transparent'}; opacity: ${i === 0 ? '1' : '0.7'}; transition: all 0.2s;" onclick="switchMainImage('${imgUrl}', this)">
+              <img src="${imgUrl}" alt="${d.name} preview ${i + 1}" style="width: 80px; height: 56px; object-fit: cover; border-radius: var(--border-radius); cursor: pointer; border: 2px solid ${i === 0 ? 'var(--color-terracotta)' : 'transparent'}; opacity: ${i === 0 ? '1' : '0.7'}; transition: all 0.2s;" onclick="switchMainImage('${imgUrl}', this)">
             `).join('')}
           </div>
         ` : ''}

@@ -28,7 +28,7 @@ exports.updateProfile = async (req, res, next) => {
       updateData.username = username.toLowerCase();
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, updateData, { new: true, runValidators: true });
+    const user = await User.findByIdAndUpdate(req.user._id, updateData, { returnDocument: 'after', runValidators: true });
     res.json({ success: true, data: user });
   } catch (error) {
     next(error);

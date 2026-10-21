@@ -58,6 +58,21 @@ exports.getReviews = async (req, res, next) => {
   }
 };
 
+// Get single review
+exports.getReview = async (req, res, next) => {
+  try {
+    const review = await Review.findById(req.params.id)
+      .populate('user', 'name username profileImage')
+      .populate('destination', 'name slug city state images');
+    if (!review) {
+      return res.status(404).json({ success: false, message: 'Review not found.' });
+    }
+    res.json({ success: true, data: review });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // Create review
 exports.createReview = async (req, res, next) => {
   try {

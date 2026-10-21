@@ -124,9 +124,14 @@ function initForm() {
 
 async function loadReviewForEdit(reviewId) {
   try {
-    // Find the review from user's reviews
-    const data = await api.get('/reviews/mine');
-    const review = data.data.find(r => r._id === reviewId);
+    let review;
+    try {
+      const res = await api.get(`/reviews/${reviewId}`);
+      review = res.data;
+    } catch (_) {
+      const data = await api.get('/reviews/mine');
+      review = data.data.find(r => r._id === reviewId);
+    }
 
     if (!review) {
       toast.error('Review not found.');
