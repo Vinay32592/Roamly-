@@ -41,6 +41,35 @@ const sendTokenResponse = (user, statusCode, res) => {
 };
 
 /* ==========================================================================
+   0. SYSTEM HEALTH CHECK (/api/health)
+   ========================================================================== */
+router.get('/health', async (req, res) => {
+  const isDbConnected = mongoose.connection.readyState === 1;
+  let counts = null;
+  if (isDbConnected) {
+    try {
+      counts = {
+        destinations: await Destination.countDocuments(),
+        reviews: await Review.countDocuments(),
+        users: await User.countDocuments()
+      };
+    } catch (_) {}
+  }
+
+  res.json({
+    status: 'healthy',
+    uptimeSeconds: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+    database: {
+      status: isDbConnected ? 'connected' : 'disconnected',
+      host: mongoose.connection.host || '127.0.0.1',
+      name: mongoose.connection.name || 'roamly'
+    },
+    counts
+  });
+});
+
+/* ==========================================================================
    1. AUTHENTICATION ROUTES (/api/auth)
    ========================================================================== */
 const authLimiter = rateLimit({
