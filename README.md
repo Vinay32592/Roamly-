@@ -218,15 +218,15 @@ Roamly uses Mongoose ODM with three primary relational models:
 [ User ] 1 ──── ∞ [ Review ] ∞ ──── 1 [ Destination ]
 ```
 
-1. **User Model (`src/models/User.js`)**:
+1. **User Model (`src/models.js` → `User`)**:
    - Fields: `name`, `username` (unique), `email` (unique), `password` (hashed), `role` (`'user'` or `'admin'`), `isActive`.
    - Hashes passwords pre-save and provides `.comparePassword()` method.
 
-2. **Destination Model (`src/models/Destination.js`)**:
+2. **Destination Model (`src/models.js` → `Destination`)**:
    - Fields: `name`, `slug` (unique), `city`, `state`, `category`, `description`, `images`, `bestTimeToVisit`, `entryFee`, `visitorTips`, `nearbyAttractions`, `averageRating`, `reviewCount`, `isFeatured`.
    - Has text indexes on `name`, `city`, `state`, and `description` for fast multi-field searching.
 
-3. **Review Model (`src/models/Review.js`)**:
+3. **Review Model (`src/models.js` → `Review`)**:
    - Fields: `destination` (ref to Destination), `user` (ref to User), `rating` (1–5), `title`, `comment`, `visitDate`, `helpfulVotes`.
    - Enforces compound unique index: `{ destination: 1, user: 1 }, { unique: true }` to guarantee a user can only review each place once.
    - Triggers `Review.calcAverageRating()` via post-save and post-delete hooks to automatically maintain destination aggregate ratings.

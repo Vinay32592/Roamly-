@@ -17,9 +17,8 @@ Roamly is built on the **Traditional Multi-Tier Client-Server Architecture** usi
   ├── 1. Security Middleware (Helmet, CORS, Rate Limiters)
   ├── 2. Body & Cookie Parsing (express.json, cookie-parser)
   ├── 3. Static File Server (express.static serves /public)
-  ├── 4. Routing Layer (/api/auth, /api/destinations, /api/reviews, /api/users, /api/admin)
-  ├── 5. Controller Layer (Business logic & responses)
-  └── 6. Centralized Error Handler
+  ├── 4. Unified Routing Layer in src/routes.js (/api/auth, /destinations, /reviews, /users, /admin)
+  └── 5. Centralized Middleware in src/middleware.js (Auth, Validators, Error Handler)
       │
       │ Mongoose ODM (Object Data Modeling)
       ▼
@@ -85,20 +84,20 @@ Tracing an example request: **`GET /api/destinations?category=Mountains&minRatin
 
 1. **Network**: The browser makes an HTTP GET request to `/api/destinations`.
 2. **App Middleware**: `src/app.js` passes the request through `helmet()`, `cors()`, `express.json()`, and `cookieParser()`.
-3. **Router Matching**: Express matches `app.use('/api/destinations', destinationRoutes)`.
-4. **Route Dispatch**: In `src/routes/destinationRoutes.js`, `router.get('/', optionalAuth, getDestinations)` matches.
-5. **Controller Execution**: In `src/controllers/destinationController.js`:
+3. **Router Matching**: Express matches `app.use('/api', apiRouter)` in `src/app.js`.
+4. **Route Dispatch**: In `src/routes.js`, `router.get('/destinations', optionalAuth, ...)` matches.
+5. **Route Logic Execution**: In `src/routes.js`:
    - Extracts `req.query.category` and `req.query.minRating`.
    - Builds a MongoDB query object: `{ category: 'Mountains', averageRating: { $gte: 4 } }`.
    - Calls `await Destination.find(query).sort({ createdAt: -1 }).skip(0).limit(12)`.
 6. **Database Engine**: Mongoose executes the query on MongoDB via the established TCP connection.
-7. **JSON Response**: Controller sends `res.json({ success: true, count, pagination, data })`.
+7. **JSON Response**: Route handler sends `res.json({ success: true, count, pagination, data })`.
 
 ---
 
 ## 5. How a Tourist Destination is Stored and Retrieved
 
-### Mongoose Schema (`src/models/Destination.js`)
+### Mongoose Schema (`src/models.js` → `Destination`)
 ```javascript
 const destinationSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true, unique: true },
@@ -131,7 +130,7 @@ const destinationSchema = new mongoose.Schema({
 ## 6. How a Review is Submitted and Saved
 
 1. **User Action**: On `write-review.html`, the user selects star rating (1–5), enters a visit date, title, and detailed review text.
-2. **Form Submission**: `public/js/reviews.js` intercepts `submit`, prevents default page reload, and posts to `POST /api/destinations/:id/reviews`.
+2. **Form Submission**: `public/js/pages.js` intercepts `submit`, prevents default page reload, and posts to `POST /api/destinations/:id/reviews`.
 3. **Route & Auth Guard**:
    - `protect` middleware verifies the JWT token from the `httpOnly` cookie. If not logged in, returns `401 Unauthorized`.
    - `validateReview` middleware checks title length, comment length (min 10 chars), and rating range (1–5).
@@ -148,7 +147,7 @@ const destinationSchema = new mongoose.Schema({
 Rather than recalculating ratings on the frontend or running manual loops in JavaScript, Roamly utilizes **MongoDB Aggregation Pipelines** embedded in Mongoose static methods:
 
 ```javascript
-// src/models/Review.js
+// src/models.js
 reviewSchema.statics.calcAverageRating = async function(destinationId) {
   const stats = await this.aggregate([
     { $match: { destination: destinationId } },
@@ -200,7 +199,7 @@ reviewSchema.statics.calcAverageRating = async function(destinationId) {
        maxAge: 7 * 24 * 60 * 60 * 1000
      });
      ```
-4. **Route Protection Middleware (`src/middleware/auth.js`)**:
+4. **Route Protection Middleware (`src/middleware.js` → `protect`)**:
    - `protect`: Extracts the token from cookie or `Authorization: Bearer <token>`, decodes it, loads user, and attaches it to `req.user`.
    - `adminOnly`: Rejects requests with `403 Forbidden` if `req.user.role !== 'admin'`.
 
@@ -222,28 +221,15 @@ reviewSchema.statics.calcAverageRating = async function(destinationId) {
 ```text
 Roamly/
 ├── server.js                    # HTTP entry point: loads .env, connects DB, starts server on port 3000
-├── package.json                 # Dependencies, project metadata, and npm scripts
+├── package.json                 # Dependencies and npm scripts (start, dev, seed)
 ├── .env                         # Secrets, DB URI, port, admin credentials (never committed)
 ├── .env.example                 # Safe environment configuration template for other developers
 │
-├── src/
+├── src/                         # Consolidated, clean backend (4 files)
 │   ├── app.js                   # Express configuration, security headers, routing, static folders
-│   ├── config/database.js       # MongoDB Mongoose connection handler
-│   ├── models/
-│   │   ├── User.js              # User schema, bcrypt hash hook, comparePassword method
-│   │   ├── Destination.js       # Tourist spot schema, text index, slug generation
-│   │   └── Review.js            # Review schema, compound unique index, calcAverageRating aggregation
-│   ├── controllers/
-│   │   ├── authController.js    # Register, login, logout, me logic
-│   │   ├── destinationController.js # CRUD, category queries, search, filter, pagination
-│   │   ├── reviewController.js  # Submit, update, delete review, helpful vote toggling
-│   │   ├── userController.js    # User profile management and review list
-│   │   └── adminController.js   # Platform stats, user suspension toggle, review moderation
-│   ├── routes/                  # Modular REST endpoint routes (/auth, /destinations, /reviews, /users, /admin)
-│   └── middleware/
-│       ├── auth.js              # JWT authentication and role-based access checks
-│       ├── validators.js        # Input validation rules (express-validator)
-│       └── errorHandler.js      # Global error catch-all returning structured JSON
+│   ├── routes.js                # Unified REST API router (/auth, /destinations, /reviews, /users, /admin)
+│   ├── models.js                # Mongoose schemas (User, Destination, Review) & calcAverageRating hooks
+│   └── middleware.js            # JWT auth guards, express-validator rules & centralized error handler
 │
 ├── public/                      # Static client assets served directly by Express
 │   ├── index.html               # Landing page with hero animation, search, and featured spots
@@ -253,19 +239,16 @@ Roamly/
 │   ├── profile.html             # Traveler profile, my reviews management
 │   ├── admin.html               # Administrator dashboard (stats, user status toggle, moderation)
 │   ├── login.html / register.html # Sign in & registration forms
+│   ├── 404.html                 # Custom not found error page
 │   ├── css/
-│   │   ├── style.css            # Custom CSS properties (design tokens), card grid, animations
-│   │   └── responsive.css       # Mobile & tablet media queries
+│   │   └── style.css            # Unified CSS custom properties, responsive design tokens, card grid
 │   ├── js/
-│   │   ├── api.js               # Reusable API client, toast notifications, star renderer
-│   │   ├── auth.js              # Navbar auth state & route guards
-│   │   └── home.js / explore.js / destination.js ... # Page-specific client controllers
+│   │   ├── app.js               # Core API client, auth session check, toast alerts & UI helpers
+│   │   └── pages.js             # View controllers for Home, Explore, Destination, Review & Admin
 │   └── images/destinations/     # 38 authentic high-resolution local destination images
 │
 └── scripts/
-    ├── seed.js                  # Canonical database seeder (38 Indian destinations)
-    ├── createAdmin.js           # Seeds the administrator account (admin@roamly.com)
-    └── seedReviews.js           # Seeds realistic community traveler reviews & recalculates scores
+    └── seed.js                  # Single canonical database seeder (38 Indian spots, admin user & reviews)
 ```
 
 ---
@@ -286,7 +269,7 @@ Roamly/
 ## 12. Typical College Viva Questions & Model Answers
 
 ### Q1: What happens if two users try to review the same destination?
-> *"Both reviews are saved because they are from different users. However, if the SAME user tries to submit a second review for the same destination, MongoDB rejects it with error code `11000` (Duplicate Key Error) because of our compound unique index `{ user: 1, destination: 1 }` on the Review collection. Our controller catches this and returns a user-friendly message: 'You have already reviewed this destination.' "*
+> *"Both reviews are saved because they are from different users. However, if the SAME user tries to submit a second review for the same destination, MongoDB rejects it with error code `11000` (Duplicate Key Error) because of our compound unique index `{ user: 1, destination: 1 }` on the Review collection. Our route handler catches this and returns a user-friendly message: 'You have already reviewed this destination.' "*
 
 ### Q2: How do you prevent SQL Injection and NoSQL Injection?
 > *"Because we use Mongoose schemas with explicit types, inputs are cast and sanitized according to schema definitions. Additionally, express-validator sanitizes input strings, and user input is never directly evaluated or concatenated into database queries."*
